@@ -1,26 +1,26 @@
 clear
 close all
 %% 读取数据
-data1 = xlsread('d://article/heat/data/201502/full/wanXing150202.xlsx');
-data2 = xlsread('d://article/heat/data/201502/full/wanXing150203.xlsx');
-data3 = xlsread('d://article/heat/data/201502/full/wanXing150204.xlsx');
-data4 = xlsread('d://article/heat/data/201502/full/wanXing150205.xlsx');
-data5 = xlsread('d://article/heat/data/201502/full/wanXing150206.xlsx');
-data6 = xlsread('d://article/heat/data/201502/full/wanXing150209.xlsx');
-data7 = xlsread('d://article/heat/data/201502/full/wanXing150210.xlsx');
-data8 = xlsread('d://article/heat/data/201502/full/wanXing150211.xlsx');
-data9 = xlsread('d://article/heat/data/201502/full/wanXing150212.xlsx');
-data10 = xlsread('d://article/heat/data/201502/full/wanXing150213.xlsx');
-data11 = xlsread('d://article/heat/data/201502/full/wanXing150216.xlsx');
-data12 = xlsread('d://article/heat/data/201502/full/wanXing150217.xlsx');
-data13 = xlsread('d://article/heat/data/201502/full/wanXing150218.xlsx');
-data14 = xlsread('d://article/heat/data/201502/full/wanXing150219.xlsx');
-data15 = xlsread('d://article/heat/data/201502/full/wanXing150220.xlsx');
-data16 = xlsread('d://article/heat/data/201502/full/wanXing150223.xlsx');
-data17 = xlsread('d://article/heat/data/201502/full/wanXing150224.xlsx');
-data18 = xlsread('d://article/heat/data/201502/full/wanXing150225.xlsx');
-data19 = xlsread('d://article/heat/data/201502/full/wanXing150226.xlsx');
-data20 = xlsread('d://article/heat/data/201502/full/wanXing150227.xlsx');
+data1 = xlsread('../data/201502/full/wanXing150202.xlsx');
+data2 = xlsread('../data/201502/full/wanXing150203.xlsx');
+data3 = xlsread('../data/201502/full/wanXing150204.xlsx');
+data4 = xlsread('../data/201502/full/wanXing150205.xlsx');
+data5 = xlsread('../data/201502/full/wanXing150206.xlsx');
+data6 = xlsread('../data/201502/full/wanXing150209.xlsx');
+data7 = xlsread('../data/201502/full/wanXing150210.xlsx');
+data8 = xlsread('../data/201502/full/wanXing150211.xlsx');
+data9 = xlsread('../data/201502/full/wanXing150212.xlsx');
+data10 = xlsread('../data/201502/full/wanXing150213.xlsx');
+data11 = xlsread('../data/201502/full/wanXing150216.xlsx');
+data12 = xlsread('../data/201502/full/wanXing150217.xlsx');
+data13 = xlsread('../data/201502/full/wanXing150218.xlsx');
+data14 = xlsread('../data/201502/full/wanXing150219.xlsx');
+data15 = xlsread('../data/201502/full/wanXing150220.xlsx');
+data16 = xlsread('../data/201502/full/wanXing150223.xlsx');
+data17 = xlsread('../data/201502/full/wanXing150224.xlsx');
+data18 = xlsread('../data/201502/full/wanXing150225.xlsx');
+data19 = xlsread('../data/201502/full/wanXing150226.xlsx');
+data20 = xlsread('../data/201502/full/wanXing150227.xlsx');
 %% 检测异常点
 % 3代表万德庄的出水温度，9代表兴泰里的出水温度
 % isnan先检测出哪些点有空值，然后后再插入前后两个点的平均值
