@@ -25,26 +25,41 @@ for j = 1 : 3
     end
 end
 %% 数据处理
-frecheteDis = cell(1, 20);
+wanFrecheteArr = zeros(1, 20);
+xingFrecheteArr = zeros(1, 20);
+wanDistArr = zeros(1, 20);
+xingDistArr = zeros(1, 20);
 for i = 1 : 20
     wanTemp    = data{i}(400:1200, 3);
     xingTemp   = data{i}(400:1200, 9);
     % 评价曲线，现在只是在0度的基础上+46度
-    judageTemp = -data{i}(400:1200, 5) + 46;
+    judgeTemp = -data{i}(400:1200, 5) + 46;
+    % 获得三条曲线的至高至低点
+    [~, wanMax] = max(wanTemp);
+    [~, wanMin] = min(wanTemp);
+    [~, judgeMax] = max(judgeTemp);
+    [~, judgeMin] = min(judgeTemp);
+    [~, xingMax] = max(xingTemp);
+    [~, xingMin] = min(xingTemp);
+    % 计算两条曲线的欧氏距离？就是点之间的间隔
+    wanDistArr(i) = abs(((wanMax - judgeMax) + (wanMin - judgeMin))/2);
+    xingDistArr(i) = abs(((xingMax - judgeMax) + (xingMin - judgeMin))/2);
     % 计算相应的Frechete Distance
-    frecheteDis{i}(1) = DiscreteFrechetDist(wanTemp, judageTemp);
-    frecheteDis{i}(2) = DiscreteFrechetDist(xingTemp, judageTemp);
+    wanFrecheteArr(i) = DiscreteFrechetDist(wanTemp, judgeTemp);
+    xingFrecheteArr(i) = DiscreteFrechetDist(xingTemp, judgeTemp);
 end
+%% 处理
+wanMatrix = [wanDistArr; wanFrecheteArr]';
+xingMatrix = [xingDistArr; xingFrecheteArr]';
+bothMatrix = [wanMatrix; xingMatrix];
+% 暂时利用K-means
+[u,re] = kmeans(bothMatrix, 2);
 %% 绘图
-% 生成两种距离的数组
-wanArr = zeros(1, 20);
-xingArr = zeros(1, 20);
-for i = 1 : 20
-    wanArr(i) = frecheteDis{i}(1);
-    xingArr(i) = frecheteDis{i}(2);
-end
-xData = [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1];
-scatter(xData, wanArr, 'g')
+plot(wanMatrix(:, 1), wanMatrix(:, 2), '*');
 hold on
-scatter(xData, xingArr, 'm')
-legend('万德庄', '兴泰里')
+plot(xingMatrix(:, 1), xingMatrix(:, 2), 'o');
+plot(u(:, 1), u(:, 2), 'Xg');
+legend('万德庄', '兴泰里', '中心点')
+title('Frechete + Delay的K-means聚类结果')
+xlabel('Delay')
+ylabel('FDF')
