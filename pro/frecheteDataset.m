@@ -75,25 +75,39 @@ end
 %% 处理
 wanMatrix = [wanDistArr; wanFrecheteArr]';
 xingMatrix = [xingDistArr; xingFrecheteArr]';
-bothMatrix = [wanMatrix; xingMatrix];
+% bothMatrix = [wanMatrix; xingMatrix];
 % 暂时利用K-means
 %[u,re] = kmeans(bothMatrix, 2);
+%% 复合度量计算
+wanMulti = 0.8 * (1 - wanFrecheteArr / 200) + 0.2 * (1 - wanDistArr / 400);
+xingMulti = 0.8 * (1 - xingFrecheteArr / 200) + 0.2 * (1 - xingDistArr / 400);
 %% 绘图
 plot(wanMatrix(:, 1), wanMatrix(:, 2), '*');
 hold on
 plot(xingMatrix(:, 1), xingMatrix(:, 2), 'o');
 %plot(u(:, 1), u(:, 2), 'Xg');
-legend('永基', '兴泰里')
-title('Frechete + Delay的K-means聚类结果')
+legend('A站', 'B站')
+title('A站与B站3月份的离散Frechete距离与延时度量分布图')
 xlabel('Delay')
 ylabel('FDF')
+%% 复合度量绘图
+plot(1:20, smooth(wanMulti * 100));
+hold on
+plot(1:20, smooth(xingMulti * 100));
+legend('A站', 'B站')
+xlabel('日期')
+ylabel('相似度（%）')
+title('A站和B站3月份出水温度与参考曲线相似度对比图')
 
-% i = 5;
-% judgeTemp = [(-data{i}(400:976, 5) - 0.5); (-data{i}(977:1140, 5) - 6.9); (-data{i}(1141:1200, 5) - 1)] + 84;
-% plot(data{1}(400:1200,13),data{i}(400:1200,3))
-% hold on
-% plot(data{1}(400:1200,13),data{i}(400:1200,9))
-% plot(data{1}(400:1200,13), judgeTemp)
-% datetick('x','HH')
-% legend('永基','兴泰里','评价')
-% title('永基和兴泰里3月2日出水温度及评价曲线对比图')
+
+i = 14;
+judgeTemp = [(-data{i}(400:976, 5) - 0.5); (-data{i}(977:1140, 5) - 6.9); (-data{i}(1141:1200, 5) - 1)] + 84;
+plot(data{1}(400:1200,13),data{i}(400:1200,3))
+hold on
+plot(data{1}(400:1200,13),data{i}(400:1200,9))
+plot(data{1}(400:1200,13), smooth(judgeTemp))
+datetick('x','HH')
+legend('A站','B站','参考')
+title('A站和B站3月14日出水温度及参考曲线对比图')
+xlabel('日期/H')
+ylabel('温度/^oC')
