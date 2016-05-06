@@ -88,11 +88,12 @@ title('Frechete + Delay的K-means聚类结果')
 xlabel('Delay')
 ylabel('FDF')
 
-% i = 9;
-% judgeTemp = [(-data{i}(400:976, 5) - 0.5); (-data{i}(977:1140, 5) - 6.9); (-data{i}(1141:1200, 5) - 1)] + 68;
+% i = 5;
+% judgeTemp = [(-data{i}(400:976, 5) - 0.5); (-data{i}(977:1140, 5) - 6.9); (-data{i}(1141:1200, 5) - 1)] + 84;
 % plot(data{1}(400:1200,13),data{i}(400:1200,3))
 % hold on
 % plot(data{1}(400:1200,13),data{i}(400:1200,9))
 % plot(data{1}(400:1200,13), judgeTemp)
 % datetick('x','HH')
 % legend('永基','兴泰里','评价')
+% title('永基和兴泰里3月2日出水温度及评价曲线对比图')
