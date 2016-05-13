@@ -41,11 +41,43 @@ wanFrecheteArr = zeros(1, 20);
 xingFrecheteArr = zeros(1, 20);
 wanDistArr = zeros(1, 20);
 xingDistArr = zeros(1, 20);
+judgeTempTest  = cell(1, 20);
 for i = 1 : 20
     wanTemp    = data{i}(400:1200, 3);
     xingTemp   = data{i}(400:1200, 9);
     % 评价曲线，气象仪各个地方用的是一个数据，通过采集仪器下发得到，兴泰里考虑了时间段
-    judgeTemp = [(-data{i}(400:976, 5) - 0.5); (-data{i}(977:1140, 5) - 6.9); (-data{i}(1141:1200, 5) - 1)] + 84;
+    %judgeTemp = [(-data{i}(400:976, 5) - 0.5); (-data{i}(977:1140, 5) - 6.9); (-data{i}(1141:1200, 5) - 1)] + 84;
+    % 平滑减少供热计划
+    d1 = 0.00174;
+    for p1 = 0 : 577   
+        data{i}(400 + p1, 5) = -data{i}(400 + p1, 5) - d1;
+        if (p1 < 288)
+            d1 = d1 + 0.00174;
+        else
+            d1 = d1 - 0.00174;
+        end
+    end
+    d2 = 0.042331;
+    for p2 = 1 : 164   
+        data{i}(977 + p2, 5) = -data{i}(977 + p2, 5) - d2;
+        if (p2 < 82)
+            d2 = d2 + 0.042331;
+        else
+            d2 = d2 - 0.042331;
+        end
+    end
+    d3 = 0.016949;
+    for p3 = 1 : 59   
+        data{i}(1141 + p3, 5) = -data{i}(1141 + p3, 5) - d3;
+        if (p3 < 30)
+            d3 = d3 + 0.016949;
+        else
+            d3 = d3 - 0.016949;
+        end
+    end
+    judgeTemp = data{i}(400:1200, 5) + 84;
+    judgeTempTest{i} = judgeTemp;
+
     % 计算相应的Frechete Distance
     wanFrecheteArr(i) = DiscreteFrechetDist(wanTemp, judgeTemp);
     xingFrecheteArr(i) = DiscreteFrechetDist(xingTemp, judgeTemp);
@@ -82,32 +114,32 @@ xingMatrix = [xingDistArr; xingFrecheteArr]';
 wanMulti = 0.8 * (1 - wanFrecheteArr / 200) + 0.2 * (1 - wanDistArr / 400);
 xingMulti = 0.8 * (1 - xingFrecheteArr / 200) + 0.2 * (1 - xingDistArr / 400);
 %% 绘图
-plot(wanMatrix(:, 1), wanMatrix(:, 2), '*');
-hold on
-plot(xingMatrix(:, 1), xingMatrix(:, 2), 'o');
-%plot(u(:, 1), u(:, 2), 'Xg');
-legend('A站', 'B站')
-title('A站与B站3月份的离散Frechete距离与延时度量分布图')
-xlabel('Delay')
-ylabel('FDF')
+% plot(wanMatrix(:, 1), wanMatrix(:, 2), '*');
+% hold on
+% plot(xingMatrix(:, 1), xingMatrix(:, 2), 'o');
+% %plot(u(:, 1), u(:, 2), 'Xg');
+% legend('A站', 'B站')
+% title('A站与B站3月份的离散Frechete距离与延时度量分布图')
+% xlabel('Delay')
+% ylabel('FDF')
 %% 复合度量绘图
-plot(1:20, smooth(wanMulti * 100));
-hold on
-plot(1:20, smooth(xingMulti * 100));
-legend('A站', 'B站')
-xlabel('日期')
-ylabel('相似度（%）')
-title('A站和B站3月份出水温度与参考曲线相似度对比图')
+% plot(1:20, smooth(wanMulti * 100));
+% hold on
+% plot(1:20, smooth(xingMulti * 100));
+% legend('A站', 'B站')
+% xlabel('日期')
+% ylabel('相似度（%）')
+% title('A站和B站3月份出水温度与参考曲线相似度对比图')
+% 
+% 
+i = 5;
+%plot(data{1}(400:1200,13),data{i}(400:1200,3))
 
-
-i = 14;
-judgeTemp = [(-data{i}(400:976, 5) - 0.5); (-data{i}(977:1140, 5) - 6.9); (-data{i}(1141:1200, 5) - 1)] + 84;
-plot(data{1}(400:1200,13),data{i}(400:1200,3))
+plot(data{1}(400:1200,13),smooth(data{i}(400:1200,9)))
 hold on
-plot(data{1}(400:1200,13),data{i}(400:1200,9))
-plot(data{1}(400:1200,13), smooth(judgeTemp))
+plot(data{1}(400:1200,13), smooth(judgeTempTest{i})-10)
 datetick('x','HH')
-legend('A站','B站','参考')
-title('A站和B站3月14日出水温度及参考曲线对比图')
+legend('A锅炉房出水温度','参考曲线')
+title('A锅炉房某日出水温度及其参考曲线')
 xlabel('日期/H')
 ylabel('温度/^oC')
