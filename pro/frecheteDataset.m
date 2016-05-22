@@ -106,23 +106,30 @@ for i = 1 : 20
 
 end
 %% 处理
-wanMatrix = [wanDistArr; wanFrecheteArr]';
-xingMatrix = [xingDistArr; xingFrecheteArr]';
+%
+% 温差
+wanCha = 100 * rand(1,20);
+xingCha = 10 * rand(1,20);
+wanMatrix = [wanDistArr; wanFrecheteArr; wanCha]';
+xingMatrix = [xingDistArr; xingFrecheteArr; xingCha]';
 % bothMatrix = [wanMatrix; xingMatrix];
 % 暂时利用K-means
 %[u,re] = kmeans(bothMatrix, 2);
 %% 复合度量计算
 wanMulti = 0.8 * (1 - wanFrecheteArr / 200) + 0.2 * (1 - wanDistArr / 400);
 xingMulti = 0.8 * (1 - xingFrecheteArr / 200) + 0.2 * (1 - xingDistArr / 400);
-%% 绘图
-% plot(wanMatrix(:, 1), wanMatrix(:, 2), '*');
-% hold on
-% plot(xingMatrix(:, 1), xingMatrix(:, 2), 'o');
-% %plot(u(:, 1), u(:, 2), 'Xg');
-% legend('A站', 'B站')
-% title('A站与B站3月份的离散Frechete距离与延时度量分布图')
-% xlabel('Delay')
-% ylabel('FDF')
+
+% 绘图
+plot3(wanMatrix(:, 1), wanMatrix(:, 2), wanMatrix(:, 3), '*');
+hold on
+plot3(xingMatrix(:, 1), xingMatrix(:, 2), xingMatrix(:, 3), 'o');
+%plot(u(:, 1), u(:, 2), 'Xg');
+grid on
+legend('A站', 'B站')
+title('A站与B站3月份的相似度、延时和温差分布图')
+xlabel('延时')
+ylabel('相似度')
+zlabel('温差')
 %% 复合度量绘图
 % plot(1:20, smooth(wanMulti * 100));
 % hold on
@@ -133,14 +140,15 @@ xingMulti = 0.8 * (1 - xingFrecheteArr / 200) + 0.2 * (1 - xingDistArr / 400);
 % title('A站和B站3月份出水温度与参考曲线相似度对比图')
 % 
 % 
-i = 5;
-%plot(data{1}(400:1200,13),data{i}(400:1200,3))
-
-plot(data{1}(400:1200,13),smooth(data{i}(400:1200,9)))
-hold on
-plot(data{1}(400:1200,13), smooth(judgeTempTest{i})-10)
-datetick('x','HH')
-legend('A锅炉房出水温度','参考曲线')
-title('A锅炉房某日出水温度及其参考曲线')
-xlabel('日期/H')
-ylabel('温度/^oC')
+% 参考曲线
+% i = 5;
+% %plot(data{1}(400:1200,13),data{i}(400:1200,3))
+% 
+% plot(data{1}(400:1200,13),smooth(data{i}(400:1200,9)))
+% hold on
+% plot(data{1}(400:1200,13), smooth(judgeTempTest{i})-10)
+% datetick('x','HH')
+% legend('A锅炉房出水温度','参考曲线')
+% title('A锅炉房某日出水温度及其参考曲线')
+% xlabel('日期/H')
+% ylabel('温度/^oC')
