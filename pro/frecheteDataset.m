@@ -27,12 +27,12 @@ nullSunXing = cell(1, 20);
         nullSunXing{i} = find(isnan(data{i}(:, 12)));
 
         % 将空数据用前后均值填补
-%          data{i}(nullExWan{i}, 3)  = (data{i}(nullExWan{i} - 2, 3) + data{i}(nullExWan{i} + 2, 3)) / 2;
-%          data{i}(nullOutWan{i}, 5)  = (data{i}(nullOutWan{i} - 2, 5) + data{i}(nullOutWan{i} + 2, 5)) / 2;
-%          data{i}(nullSunWan{i}, 6)  = (data{i}(nullSunWan{i} - 2, 6) + data{i}(nullSunWan{i} + 2, 6)) / 2;         
-%          data{i}(nullExXing{i}, 9) = (data{i}(nullExXing{i} - 2, 9) + data{i}(nullExXing{i} + 2, 9)) / 2;
-%          data{i}(nullOutXing{i}, 11) = (data{i}(nullOutXing{i} - 2, 11) + data{i}(nullOutXing{i} + 2, 11)) / 2;
-%          data{i}(nullSunXing{i}, 12) = (data{i}(nullSunXing{i} - 2, 12) + data{i}(nullSunXing{i} + 2, 12)) / 2;
+         data{i}(nullExWan{i}, 3)  = (data{i}(nullExWan{i} - 2, 3) + data{i}(nullExWan{i} + 2, 3)) / 2;
+         data{i}(nullOutWan{i}, 5)  = (data{i}(nullOutWan{i} - 2, 5) + data{i}(nullOutWan{i} + 2, 5)) / 2;
+         data{i}(nullSunWan{i}, 6)  = (data{i}(nullSunWan{i} - 2, 6) + data{i}(nullSunWan{i} + 2, 6)) / 2;         
+         data{i}(nullExXing{i}, 9) = (data{i}(nullExXing{i} - 2, 9) + data{i}(nullExXing{i} + 2, 9)) / 2;
+         data{i}(nullOutXing{i}, 11) = (data{i}(nullOutXing{i} - 2, 11) + data{i}(nullOutXing{i} + 2, 11)) / 2;
+         data{i}(nullSunXing{i}, 12) = (data{i}(nullSunXing{i} - 2, 12) + data{i}(nullSunXing{i} + 2, 12)) / 2;
 
     end
 
@@ -42,6 +42,9 @@ xingFrecheteArr = zeros(1, 20);
 wanDistArr = zeros(1, 20);
 xingDistArr = zeros(1, 20);
 judgeTempTest  = cell(1, 20);
+varWan = zeros(1, 20);
+varXing = zeros(1, 20);
+varJudge = zeros(1, 20);
 for i = 1 : 20
     wanTemp    = data{i}(400:1200, 3);
     xingTemp   = data{i}(400:1200, 9);
@@ -78,6 +81,11 @@ for i = 1 : 20
     end
     judgeTemp = data{i}(400:1200, 5) + 84;
     judgeTempTest{i} = judgeTemp;
+% 方差
+varWan(i) = var(wanTemp);
+varXing(i) = var(xingTemp);
+varJudge(i) = var(judgeTemp);
+
 
     % 计算相应的Frechete Distance
     wanFrecheteArr(i) = DiscreteFrechetDist(wanTemp, judgeTemp);
@@ -116,20 +124,20 @@ xingMatrix = [xingDistArr; xingFrecheteArr; xingCha]';
 % 暂时利用K-means
 %[u,re] = kmeans(bothMatrix, 2);
 %% 复合度量计算
-wanMulti = 0.8 * (1 - wanFrecheteArr / 200) + 0.2 * (1 - wanDistArr / 400);
-xingMulti = 0.8 * (1 - xingFrecheteArr / 200) + 0.2 * (1 - xingDistArr / 400);
-
-% 绘图
-plot3(wanMatrix(:, 1), wanMatrix(:, 2), wanMatrix(:, 3), '*');
-hold on
-plot3(xingMatrix(:, 1), xingMatrix(:, 2), xingMatrix(:, 3), 'o');
-%plot(u(:, 1), u(:, 2), 'Xg');
-grid on
-legend('A站', 'B站')
-title('A站与B站3月份的相似度、延时和温差分布图')
-xlabel('延时')
-ylabel('相似度')
-zlabel('温差')
+% wanMulti = 0.8 * (1 - wanFrecheteArr / 200) + 0.2 * (1 - wanDistArr / 400);
+% xingMulti = 0.8 * (1 - xingFrecheteArr / 200) + 0.2 * (1 - xingDistArr / 400);
+% 
+% % 绘图
+% plot3(wanMatrix(:, 1), wanMatrix(:, 2), wanMatrix(:, 3), '*');
+% hold on
+% plot3(xingMatrix(:, 1), xingMatrix(:, 2), xingMatrix(:, 3), 'o');
+% %plot(u(:, 1), u(:, 2), 'Xg');
+% grid on
+% legend('A站', 'B站')
+% title('A站与B站3月份的相似度、延时和温差分布图')
+% xlabel('延时')
+% ylabel('相似度')
+% zlabel('温差')
 %% 复合度量绘图
 % plot(1:20, smooth(wanMulti * 100));
 % hold on
@@ -141,14 +149,25 @@ zlabel('温差')
 % 
 % 
 % 参考曲线
-% i = 5;
-% %plot(data{1}(400:1200,13),data{i}(400:1200,3))
-% 
-% plot(data{1}(400:1200,13),smooth(data{i}(400:1200,9)))
+i = 10;
+%plot(data{1}(400:1200,13),data{i}(400:1200,3))
+
+plot(data{1}(400:1200,13),smooth(data{i}(400:1200,9)), 'LineWidth',2)
+hold on
+plot(data{1}(400:1200,13),smooth(data{i+1}(400:1200,9))+2)
+%plot(data{1}(400:1200,13), smooth(judgeTempTest{i})-10)
+datetick('x','HH')
+legend('A锅炉房出水温度','参考曲线')
+title('A锅炉房某日出水温度曲线及其参考曲线')
+xlabel('时间/H')
+ylabel('温度/^oC')
+
+
+% 方差图
+
+% plot(1:20, varWan);
 % hold on
-% plot(data{1}(400:1200,13), smooth(judgeTempTest{i})-10)
-% datetick('x','HH')
-% legend('A锅炉房出水温度','参考曲线')
-% title('A锅炉房某日出水温度及其参考曲线')
-% xlabel('日期/H')
-% ylabel('温度/^oC')
+% plot(1:20, varXing)
+% plot(1:20, varJudge)
+% legend('永基', '兴泰里', '参考曲线')
+% title('20天方差')
