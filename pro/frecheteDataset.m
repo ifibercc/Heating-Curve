@@ -82,9 +82,9 @@ for i = 1 : 20
     judgeTemp = data{i}(400:1200, 5) + 84;
     judgeTempTest{i} = judgeTemp;
 % 方差
-varWan(i) = var(wanTemp);
-varXing(i) = var(xingTemp);
-varJudge(i) = var(judgeTemp);
+% varWan(i) = var(wanTemp);
+% varXing(i) = var(xingTemp);
+% varJudge(i) = var(judgeTemp);
 
 
     % 计算相应的Frechete Distance
