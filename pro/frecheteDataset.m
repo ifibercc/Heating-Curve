@@ -1,3 +1,4 @@
+% 属性相似度
 clear
 close all
 %% 加载数据
