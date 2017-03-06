@@ -104,13 +104,13 @@ yiF = DiscreteFrechetDist(yichu, yimu);
  final = [jiaRes;yiRes];
  
  %% 画图
-plot(data(61:901,13),jiamu,'linewidth',2)
+plot(data(61:901,13),jiamu,'--k','linewidth',1)
 hold on
-plot(data(61:901,13),jiachu)
-plot(data(61:901,13),yimu,'linewidth',2)
-plot(data(61:901,13),yichu)
+plot(data(61:901,13),jiachu,'k','linewidth',1)
+plot(data(61:901,13),yimu,'--k','linewidth',1)
+plot(data(61:901,13),yichu,'k','linewidth',1)
 
 datetick('x','HH')
-xlabel('日期/天')
+xlabel('时刻')
 ylabel('温度/^oC')
 legend('甲锅炉房目标温度','甲锅炉房出水温度','乙锅炉房目标温度','乙锅炉房出水温度')

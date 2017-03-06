@@ -17,9 +17,9 @@ b = [
 0.21
 0.25 
 ];
-plot(a,'linewidth',2);
+plot(a,'--k','linewidth',2);
 hold on 
-plot(b)
+plot(b,'k','linewidth',2)
 legend('甲锅炉房','乙锅炉房')
 xlabel('日期/天')
 ylabel('一致性度量')
